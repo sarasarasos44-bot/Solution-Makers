@@ -2,138 +2,174 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solution Makers - Royal Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Solution Makers - Ultimate Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #f59e0b; --bg: #020617; --card: rgba(30, 41, 59, 0.5); }
-        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: white; transition: 0.5s; overflow: hidden; height: 100vh; }
-        .glass { background: var(--card); backdrop-filter: blur(15px); border: 1px solid rgba(245, 158, 11, 0.1); }
-        .page { position: absolute; inset: 0; padding: 20px; display: none; flex-direction: column; animation: slide 0.4s ease-out; overflow-y: auto; padding-bottom: 120px; }
+        :root { --gold: #f59e0b; --bg: #020617; --card: rgba(30, 41, 59, 0.6); }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: white; transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; height: 100vh; margin: 0; }
+        .glass { background: var(--card); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .page { position: absolute; inset: 0; padding: 30px; display: none; flex-direction: column; animation: zoomIn 0.5s ease; overflow-y: auto; padding-bottom: 140px; }
         .active-page { display: flex; }
-        @keyframes slide { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-        .nav-btn { opacity: 0.4; transition: 0.3s; }
-        .nav-active { opacity: 1; color: var(--gold); transform: scale(1.2); filter: drop-shadow(0 0 10px var(--gold)); }
-        #board { background: #ffffff; border-radius: 20px; touch-action: none; cursor: crosshair; }
-        .toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); transition: 0.5s; z-index: 9999; }
-        .toast.show { top: 20px; }
-        /* ثيمات المكافآت */
-        body.royal-theme { --bg: #1a1a1a; --gold: #fbbf24; }
-        body.emerald-theme { --bg: #062017; --gold: #10b981; }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .nav-btn { opacity: 0.3; transition: 0.4s; }
+        .nav-active { opacity: 1; color: var(--gold); transform: scale(1.2) translateY(-5px); filter: drop-shadow(0 0 15px var(--gold)); }
+        #board { background: #ffffff; border-radius: 30px; touch-action: none; width: 100%; height: 550px; cursor: crosshair; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; }
+        .toast.show { top: 30px; }
+        /* الثيمات الاحترافية */
+        body.emerald { --bg: #062017; --gold: #10b981; }
+        body.lava { --bg: #2d0a0a; --gold: #ef4444; }
+        body.space { --bg: #0f172a; --gold: #8b5cf6; background-image: radial-gradient(circle at center, #1e293b 0%, #020617 100%); }
+        .medal-slot { transition: 0.5s; filter: grayscale(1) opacity(0.2); }
+        .medal-unlocked { filter: grayscale(0) opacity(1); transform: scale(1.1); animation: glow 2s infinite alternate; }
+        @keyframes glow { from { filter: drop-shadow(0 0 5px var(--gold)); } to { filter: drop-shadow(0 0 20px var(--gold)); } }
     </style>
 </head>
 <body>
-    <div id="toast" class="toast glass px-8 py-4 rounded-full border-gold shadow-2xl">✨ <span id="msg"></span></div>
+    <div id="toast" class="toast glass px-10 py-5 rounded-3xl border-gold shadow-[0_0_50px_rgba(245,158,11,0.3)] text-lg font-black">✨ <span id="msg"></span></div>
     <div id="p-login" class="page active-page items-center justify-center">
-        <div class="w-24 h-24 bg-gradient-to-t from-yellow-700 to-yellow-400 rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(245,158,11,0.5)] text-4xl animate-pulse">👑</div>
-        <h1 class="text-3xl font-black mb-2 font-['Orbitron'] text-yellow-500 uppercase tracking-widest">Solution Makers</h1>
-        <p class="text-slate-500 mb-8 text-xs font-bold">النسخة الاحترافية للمبدعين</p>
-        <input id="u-name" type="text" class="w-full max-w-xs bg-white/5 border border-yellow-500/20 p-5 rounded-2xl text-center outline-none focus:border-yellow-500 transition-all text-lg mb-4" placeholder="اسمك المستعار">
-        <button onclick="login()" class="w-full max-w-xs bg-yellow-600 hover:bg-yellow-500 py-5 rounded-2xl font-black text-black shadow-xl transition-all">تفعيل الدخول</button>
+        <div class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-yellow-600 to-red-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+            <div class="relative w-32 h-32 bg-black rounded-full flex items-center justify-center text-5xl shadow-2xl">🇴🇲</div>
+        </div>
+        <h1 class="text-5xl font-black mt-10 mb-2 font-['Orbitron'] text-yellow-500 tracking-[10px]">SOLUTION</h1>
+        <h1 class="text-3xl font-black mb-8 font-['Orbitron'] text-white opacity-80 tracking-[5px]">MAKERS ELITE</h1>
+        <input id="u-name" type="text" class="w-full max-w-md bg-white/5 border-2 border-white/10 p-6 rounded-[30px] text-center outline-none focus:border-yellow-500 transition-all text-xl mb-6 shadow-inner" placeholder="اسم القائد المبدع">
+        <button onclick="login()" class="w-full max-w-md bg-gradient-to-r from-yellow-600 to-yellow-400 py-6 rounded-[30px] font-black text-black text-2xl shadow-2xl hover:scale-105 transition-transform active:scale-95">بدء القيادة 🚀</button>
     </div>
 
     <div id="p-home" class="page">
-        <header class="flex justify-between items-center mb-8">
-            <div class="flex items-center gap-3">
-                <div id="av" class="w-12 h-12 rounded-full bg-yellow-600 flex items-center justify-center font-bold text-black border-2 border-white/20"></div>
-                <p id="nb" class="font-black text-lg text-yellow-500"></p>
+        <header class="flex justify-between items-center mb-10">
+            <div class="flex items-center gap-5">
+                <div id="av" class="w-16 h-16 rounded-[22px] bg-yellow-600 flex items-center justify-center font-black text-3xl text-black border-4 border-white/10 shadow-lg"></div>
+                <div>
+                    <p class="text-[10px] opacity-50 uppercase tracking-[4px]">Elite Member</p>
+                    <p id="nb" class="font-black text-2xl text-yellow-500"></p>
+                </div>
             </div>
-            <div class="glass px-4 py-2 rounded-full text-yellow-400 font-black">⭐ <span id="xp">0</span></div>
+            <div class="glass px-6 py-3 rounded-2xl text-yellow-400 font-black text-xl border-yellow-500/20 shadow-lg">⭐ <span id="xp">0</span></div>
         </header>
 
-        <div class="glass p-8 rounded-[40px] text-center mb-6 border-yellow-500/20 shadow-inner">
-            <div id="timer" class="text-7xl font-['Orbitron'] font-black mb-6 text-white">25:00</div>
-            <div class="flex justify-center gap-4 mb-6">
-                <button onclick="setTime(1500)" class="text-[10px] glass px-3 py-1 rounded-full border-white/10">25 د</button>
-                <button onclick="setTime(600)" class="text-[10px] glass px-3 py-1 rounded-full border-white/10">10 د</button>
-                <button onclick="setTime(300)" class="text-[10px] glass px-3 py-1 rounded-full border-white/10">5 د</button>
+        <div class="glass p-10 rounded-[60px] text-center mb-8 border-white/5 relative overflow-hidden group">
+            <div id="timer" class="text-8xl font-['Orbitron'] font-black mb-8 tracking-tighter text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">25:00</div>
+            <div class="flex justify-center gap-3 mb-8">
+                <button onclick="setTime(1500, 'تركيز')" class="glass px-5 py-2 rounded-full text-xs font-bold hover:bg-yellow-500/20 transition">🧠 تركيز</button>
+                <button onclick="setTime(300, 'استراحة')" class="glass px-5 py-2 rounded-full text-xs font-bold hover:bg-green-500/20 transition">☕ استراحة</button>
+                <button onclick="setTime(900, 'إبداع')" class="glass px-5 py-2 rounded-full text-xs font-bold hover:bg-blue-500/20 transition">🎨 إبداع</button>
             </div>
-            <button id="t-btn" onclick="runTimer()" class="w-full bg-yellow-600 text-black py-4 rounded-3xl font-black uppercase shadow-xl hover:scale-95 transition">بدء الجلسة</button>
+            <button id="t-btn" onclick="runTimer()" class="w-full bg-yellow-600 text-black py-6 rounded-[30px] font-black text-xl uppercase tracking-widest shadow-[0_15px_40px_rgba(245,158,11,0.2)] active:scale-95 transition">ابدأ الجلسة الآن</button>
         </div>
 
         <div class="space-y-4">
-            <h3 class="font-bold text-xs opacity-50 px-2 uppercase">الأهداف النشطة</h3>
-            <div class="glass p-3 rounded-2xl flex gap-2 border-white/5">
-                <input id="ti" type="text" class="bg-transparent flex-grow px-3 outline-none text-sm" placeholder="ماذا سننجز الآن؟">
-                <button onclick="addTask()" class="bg-yellow-600 text-black w-12 h-12 rounded-xl font-bold">+</button>
+            <h3 class="font-black text-xs opacity-40 px-4 uppercase tracking-[5px]">المهمات الإستراتيجية</h3>
+            <div class="glass p-4 rounded-[35px] flex gap-3 border-white/5 shadow-inner">
+                <input id="ti" type="text" class="bg-transparent flex-grow px-4 outline-none text-lg font-bold" placeholder="ما هو هدفك القادم؟">
+                <button onclick="addTask()" class="bg-yellow-600 text-black w-16 h-16 rounded-3xl font-black text-3xl shadow-xl hover:rotate-90 transition-transform">+</button>
             </div>
-            <div id="tl" class="space-y-3"></div>
+            <div id="tl" class="space-y-4 pb-20"></div>
         </div>
     </div>
     <div id="p-board" class="page">
-        <h2 class="text-2xl font-black mb-4 text-yellow-500">منصة التلخيص الذكية 🖋️</h2>
-        <div class="relative bg-white rounded-2xl p-1 mb-4 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-            <canvas id="board" class="w-full h-[400px]"></canvas>
+        <div class="flex justify-between items-center mb-6 px-2">
+            <h2 class="text-3xl font-black text-yellow-500">منصة التلخيص الذكية 🎨</h2>
+            <div class="flex gap-2">
+                 <button onclick="setTool('pen')" class="glass p-4 rounded-2xl border-yellow-500/20 hover:bg-yellow-500/20 transition">🖊️</button>
+                 <button onclick="setTool('eraser')" class="glass p-4 rounded-2xl border-red-500/20 hover:bg-red-500/20 transition">🧼</button>
+            </div>
         </div>
-        <div class="flex flex-wrap gap-2 justify-center bg-black/40 p-4 rounded-3xl">
-            <button onclick="setTool('pen')" class="glass p-3 rounded-xl border-yellow-500/20">🖌️</button>
-            <button onclick="setTool('eraser')" class="glass p-3 rounded-xl border-yellow-500/20">🧼</button>
-            <input type="color" id="color" onchange="col=this.value" class="w-10 h-10 bg-transparent border-none">
-            <select onchange="ctx.lineWidth=this.value" class="bg-transparent text-xs glass p-2 rounded-xl outline-none">
-                <option value="2">رفيع</option><option value="5" selected>متوسط</option><option value="15">عريض</option>
+        <div class="bg-white rounded-[40px] p-2 mb-6 shadow-2xl overflow-hidden border-8 border-black">
+            <canvas id="board"></canvas>
+        </div>
+        <div class="flex flex-wrap gap-4 justify-center glass p-6 rounded-[40px]">
+            <input type="color" id="color" onchange="col=this.value" class="w-14 h-14 bg-transparent border-none cursor-pointer">
+            <select onchange="lineWidth=this.value" class="bg-black/50 text-sm font-bold glass px-6 rounded-2xl outline-none">
+                <option value="3">خط رفيع</option>
+                <option value="8" selected>خط متوسط</option>
+                <option value="20">خط عريض</option>
             </select>
-            <button onclick="clearBoard()" class="text-[10px] font-bold text-red-400 px-4">مسح</button>
-            <button onclick="saveBoard()" class="bg-yellow-600 text-black px-6 py-2 rounded-xl text-xs font-black">حفظ كصورة</button>
+            <button onclick="clearBoard()" class="px-8 py-4 rounded-2xl font-black text-red-500 hover:bg-red-500/10 transition">مسح الكل</button>
+            <button onclick="saveBoard()" class="bg-yellow-600 text-black px-10 py-4 rounded-2xl font-black shadow-xl">حفظ العمل كصورة 📥</button>
         </div>
     </div>
 
     <div id="p-shop" class="page">
-        <h2 class="text-2xl font-black mb-8 text-yellow-500 text-center">متجر الجوائز الملكية 🎁</h2>
-        <div class="space-y-4">
-            <div class="glass p-6 rounded-[35px] flex justify-between items-center border-emerald-500/30">
-                <div><p class="font-bold">ثيم الزمرد 💚</p><p class="text-[10px] opacity-50">تغيير كامل للون التطبيق - 1000 نقطة</p></div>
-                <button onclick="buy(1000,'emerald')" class="bg-emerald-600 text-white px-5 py-2 rounded-xl text-xs font-bold">شراء</button>
+        <h2 class="text-3xl font-black mb-10 text-yellow-500 text-center uppercase tracking-[5px]">سوق النخبة 💎</h2>
+        
+        <div class="grid grid-cols-3 gap-4 mb-12">
+            <div id="m1" class="medal-slot glass p-6 rounded-3xl flex flex-col items-center gap-2">
+                <span class="text-4xl">🥉</span><p class="text-[8px] font-black">مبدع ناشئ</p>
             </div>
-            <div class="glass p-6 rounded-[35px] flex justify-between items-center border-yellow-500/30">
-                <div><p class="font-bold">القلم الملكي 👑</p><p class="text-[10px] opacity-50">يفتح اللون الذهبي في السبورة - 500 نقطة</p></div>
-                <button onclick="buy(500,'gold-pen')" class="bg-yellow-600 text-black px-5 py-2 rounded-xl text-xs font-bold">شراء</button>
+            <div id="m2" class="medal-slot glass p-6 rounded-3xl flex flex-col items-center gap-2">
+                <span class="text-4xl">🥈</span><p class="text-[8px] font-black">قائد فذ</p>
+            </div>
+            <div id="m3" class="medal-slot glass p-6 rounded-3xl flex flex-col items-center gap-2">
+                <span class="text-4xl">🥇</span><p class="text-[8px] font-black">أسطورة عُمان</p>
             </div>
         </div>
-        <h2 class="text-2xl font-black mt-10 mb-6 text-indigo-400 text-center">لوحة الإنجازات 📊</h2>
-        <div class="grid grid-cols-2 gap-4" id="achievements-list">
-             <div class="glass p-4 rounded-3xl opacity-30" id="ach-1">🔰 مبتدئ</div>
-             <div class="glass p-4 rounded-3xl opacity-30" id="ach-2">🔥 مجتهد</div>
+
+        <div class="space-y-6">
+            <div class="glass p-8 rounded-[45px] flex justify-between items-center border-emerald-500/20 shadow-lg">
+                <div><p class="text-xl font-black text-emerald-400">ثيم الزمرد 💚</p><p class="text-xs opacity-50">تغيير هوية التطبيق - 1000 XP</p></div>
+                <button onclick="buy(1000,'emerald')" class="bg-emerald-600 px-8 py-3 rounded-2xl font-black shadow-lg">شراء</button>
+            </div>
+            <div class="glass p-8 rounded-[45px] flex justify-between items-center border-red-500/20 shadow-lg">
+                <div><p class="text-xl font-black text-red-500">ثيم الحمم 🌋</p><p class="text-xs opacity-50">تغيير هوية التطبيق - 2000 XP</p></div>
+                <button onclick="buy(2000,'lava')" class="bg-red-600 px-8 py-3 rounded-2xl font-black shadow-lg">شراء</button>
+            </div>
+            <div class="glass p-8 rounded-[45px] flex justify-between items-center border-purple-500/20 shadow-lg">
+                <div><p class="text-xl font-black text-purple-400">ثيم الفضاء 🌌</p><p class="text-xs opacity-50">تغيير هوية التطبيق - 5000 XP</p></div>
+                <button onclick="buy(5000,'space')" class="bg-purple-600 px-8 py-3 rounded-2xl font-black shadow-lg">شراء</button>
+            </div>
         </div>
     </div>
 
-    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] h-20 glass rounded-full flex justify-around items-center px-2 z-50 border-white/10 shadow-2xl">
-        <button onclick="nav('home')" id="n-home" class="nav-btn nav-active text-2xl">🏠</button>
-        <button onclick="nav('board')" id="n-board" class="nav-btn text-2xl">🎨</button>
-        <button onclick="nav('shop')" id="n-shop" class="nav-btn text-2xl">🎁</button>
+    <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] h-24 glass rounded-[50px] flex justify-around items-center px-6 z-50 border-white/10 shadow-2xl">
+        <button onclick="nav('home')" id="n-home" class="nav-btn nav-active text-4xl">🏠</button>
+        <button onclick="nav('board')" id="n-board" class="nav-btn text-4xl">🎨</button>
+        <button onclick="nav('shop')" id="n-shop" class="nav-btn text-4xl">🏆</button>
     </nav>
     <script>
         let xp = parseInt(localStorage.getItem('xp')) || 0;
         let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        let t = null, sec = 1500, col = '#000000', tool = 'pen', canvas, ctx, drawing = false;
+        let t = null, sec = 1500, col = '#000000', tool = 'pen', drawing = false, lineWidth = 8;
+        let canvas, ctx;
 
         function notify(m) {
-            const t = document.getElementById('toast');
+            const toast = document.getElementById('toast');
             document.getElementById('msg').innerText = m;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         function save() {
             localStorage.setItem('xp', xp);
             localStorage.setItem('tasks', JSON.stringify(tasks));
             document.getElementById('xp').innerText = xp;
-            // تفعيل الإنجازات تلقائياً
-            if(xp >= 500) document.getElementById('ach-1').classList.remove('opacity-30');
-            if(xp >= 2000) document.getElementById('ach-2').classList.remove('opacity-30');
+            
+            // نظام الميداليات التلقائي
+            if(xp >= 500) document.getElementById('m1').classList.add('medal-unlocked');
+            if(xp >= 2500) document.getElementById('m2').classList.add('medal-unlocked');
+            if(xp >= 10000) document.getElementById('m3').classList.add('medal-unlocked');
         }
 
-        function setTime(s) { sec = s; document.getElementById('timer').innerText = Math.floor(sec/60)+":00"; notify("تم ضبط الوقت!"); }
+        function setTime(s, type) { 
+            if(t) { clearInterval(t); t = null; document.getElementById('t-btn').innerText = "ابدأ الجلسة"; }
+            sec = s; 
+            document.getElementById('timer').innerText = Math.floor(sec/60)+":00"; 
+            notify(`تم تفعيل وضع الـ ${type}!`); 
+        }
 
         function login() {
             const n = document.getElementById('u-name').value;
-            if(!n) return notify("القادة يحتاجون اسماً!");
+            if(!n) return notify("القادة لا يدخلون بدون أسماء!");
             localStorage.setItem('name', n);
             document.getElementById('nb').innerText = n;
             document.getElementById('av').innerText = n[0].toUpperCase();
             document.getElementById('p-login').classList.remove('active-page');
-            nav('home'); save(); initBoard();
+            nav('home'); save();
         }
 
         function nav(p) {
@@ -141,81 +177,97 @@
             document.getElementById('p-' + p).classList.add('active-page');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
             document.getElementById('n-' + p).classList.add('nav-active');
+            if(p === 'board') setTimeout(initBoard, 200);
+        }
+
+        function initBoard() {
+            canvas = document.getElementById('board');
+            ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 550;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            const getPos = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: (e.clientX || e.touches[0].clientX) - rect.left,
+                    y: (e.clientY || e.touches[0].clientY) - rect.top
+                };
+            };
+
+            const start = (e) => { drawing = true; ctx.beginPath(); const pos = getPos(e); ctx.moveTo(pos.x, pos.y); };
+            const move = (e) => {
+                if(!drawing) return;
+                e.preventDefault();
+                const pos = getPos(e);
+                ctx.strokeStyle = tool === 'eraser' ? '#ffffff' : col;
+                ctx.lineWidth = tool === 'eraser' ? 40 : lineWidth;
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            };
+            const stop = () => { drawing = false; };
+
+            canvas.onmousedown = start; canvas.onmousemove = move; window.onmouseup = stop;
+            canvas.ontouchstart = start; canvas.ontouchmove = move; canvas.ontouchend = stop;
         }
 
         function runTimer() {
             const b = document.getElementById('t-btn');
-            if(t) { clearInterval(t); t = null; b.innerText = "استمرار"; }
+            if(t) { clearInterval(t); t = null; b.innerText = "استمرار الجلسة"; }
             else {
-                b.innerText = "توقف";
+                b.innerText = "توقف مؤقت";
                 t = setInterval(() => {
                     sec--;
                     let m = Math.floor(sec/60), s = sec%60;
                     document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
                     if(sec <= 0) {
-                        clearInterval(t); confetti(); xp += 500; save();
-                        notify("إنجاز ملكي! +500 نقطة"); sec = 1500; b.innerText = "بدء";
+                        clearInterval(t); confetti({particleCount: 300, spread: 100}); 
+                        xp += 1000; save();
+                        notify("إنجاز عظيم! +1000 XP"); sec = 1500; b.innerText = "ابدأ";
                     }
                 }, 1000);
             }
         }
 
         function addTask() {
-            const v = document.getElementById('ti').value;
-            if(!v) return;
+            const v = document.getElementById('ti').value; if(!v) return;
             tasks.push({id: Date.now(), text: v});
-            document.getElementById('ti').value = "";
-            renderTasks(); save();
+            document.getElementById('ti').value = ""; renderTasks(); save();
         }
 
         function renderTasks() {
             const l = document.getElementById('tl'); l.innerHTML = "";
             tasks.forEach(t => {
                 const i = document.createElement('div');
-                i.className = "glass p-4 rounded-2xl flex justify-between items-center animate-bounce";
-                i.innerHTML = `<span>${t.text}</span><button onclick="completeTask(${t.id})" class="bg-yellow-600 text-black px-4 py-2 rounded-xl text-xs font-bold font-['Cairo']">تم</button>`;
+                i.className = "glass p-6 rounded-[30px] flex justify-between items-center animate-bounce border-white/5";
+                i.innerHTML = `<span class="text-lg font-bold">${t.text}</span><button onclick="completeTask(${t.id})" class="bg-yellow-600 text-black px-8 py-3 rounded-2xl font-black">إنجاز</button>`;
                 l.prepend(i);
             });
         }
 
         function completeTask(id) {
-            confetti({ particleCount: 100, origin: {y: 0.8} });
+            confetti({ particleCount: 150, spread: 70 });
             tasks = tasks.filter(t => t.id !== id);
-            xp += 100; renderTasks(); save(); notify("تمت المهمة! +100 نقطة");
+            xp += 200; renderTasks(); save(); notify("هدف محقق! +200 XP");
         }
 
-        function buy(c, item) {
+        function buy(c, theme) {
             if(xp >= c) {
                 xp -= c; save(); confetti();
-                if(item === 'emerald') document.body.className = 'emerald-theme';
-                if(item === 'gold-pen') { col = '#f59e0b'; notify("تم تفعيل القلم الذهبي!"); }
-                notify("تم الشراء والتفعيل بنجاح!");
-            } else notify("نقاطك لا تكفي!");
-        }
-
-        function initBoard() {
-            canvas = document.getElementById('board');
-            ctx = canvas.getContext('2d');
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = 400;
-            ctx.lineCap = 'round'; ctx.lineWidth = 5;
-            canvas.onpointerdown = (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); };
-            canvas.onpointermove = (e) => {
-                if(!drawing) return;
-                ctx.strokeStyle = tool === 'eraser' ? '#ffffff' : col;
-                ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
-            };
-            canvas.onpointerup = () => drawing = false;
+                document.body.className = theme;
+                notify(`تم تفعيل ثيم ${theme} بنجاح!`);
+            } else notify("نقاطك لا تكفي لهذا الشرف!");
         }
 
         function setTool(t) { tool = t; }
-        function clearBoard() { ctx.clearRect(0,0,canvas.width,canvas.height); }
+        function clearBoard() { ctx.clearRect(0,0,canvas.width,canvas.height); notify("تم تنظيف المنصة!"); }
         function saveBoard() {
             const link = document.createElement('a');
-            link.download = 'Solution-Makers-Board.png';
+            link.download = 'Elite-Summary.png';
             link.href = canvas.toDataURL();
             link.click();
-            notify("تم حفظ التلخيص في جهازك!");
+            notify("تم حفظ الإبداع في جهازك!");
         }
 
         window.onload = () => {
